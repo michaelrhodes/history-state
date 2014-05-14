@@ -5,12 +5,26 @@
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font: bold 20px/1.625em sans-serif;
+    font: bold 20px/1.6em sans-serif;
     margin: 3em;
     text-rendering: optimizeLegibility;
   }
+
+  h1 {
+    font-size: 2em;
+    line-height: 1.25em
+  }
+
+  h1:before {
+    content: 'Current Page';
+    display: block;
+    font-size: 0.4em;
+    line-height: 1.25em;
+    text-transform: uppercase;
+  }
 </style>
 <body>
+  <h1>Homepage</h1>
   <ol class="pages">
     <li><a href="/queensland">Queensland</a></li>
     <li><a href="/new-south-wales">New South Wales</a></li>
@@ -20,6 +34,9 @@
     <li><a href="/south-australia">South Australia</a></li>
     <li><a href="/western-australia">Western Australia</a></li>
     <li><a href="/northern-territory">Northern Territory</a></li>
-  </ol> 
+  </ol>
+  <!--[if lt IE 9]><!-->
+  <script src="function-prototype-bind.js"></script>
+  <!--<![endif]-->
   <script src="build.js"></script>
 </body>
