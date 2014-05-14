@@ -25,6 +25,7 @@ var HistoryState = function(options) {
     return new HistoryState
   }
 
+  this.started = false
   this.start = this.start.bind(this)
   this.announce = this.emit.bind(this, 'change')
 
@@ -35,11 +36,17 @@ emitter(HistoryState.prototype)
 
 HistoryState.prototype.start = function() {
   raf(function() {
+    if (this.started) {
+      return
+    }
+
+    this.started = true
+    this.announce()
+
     hasPushState ?
       listener.add(window, 'popstate', this.announce) :
       listener.add(window, 'hashchange', this.announce)
 
-    this.announce()
   }.bind(this))
 }
 
@@ -50,8 +57,12 @@ HistoryState.prototype.stop = function() {
 }
 
 HistoryState.prototype.change = function(path) {
-  var reload = (hasPushState ?
-    path === location.pathname + location.hash :
+  var isHash = /^#/.test(path)
+  var reload = (
+    isHash ?
+      path === location.hash :
+    hasPushState ?
+      path === location.pathname + location.hash :
     path === location.hash.substr(1)
   )
 

@@ -2,7 +2,7 @@ var format = require('title-case')
 var concat = require('concat-regexp')
 var normalize = require('normalize-event')
 var can = require('can-route')()
-var state = require('../')()
+var state = window.state = require('../')()
 
 var posthost = function(href) {
   return href.replace(/^.+:\/\/[^\/]+(.+)/, '$1')
