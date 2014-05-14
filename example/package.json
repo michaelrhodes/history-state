@@ -1,0 +1,22 @@
+{
+  "name": "history-state-example",
+  "private": true,
+  "version": "0.0.0",
+  "description": "An example of how you could use the history-state module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browserify index.js -o build.js && node server.js 1234"
+  },
+  "author": "Michael Rhodes",
+  "license": "MIT",
+  "dependencies": {
+    "can-route": "^0.3.0",
+    "concat-regexp": "0.0.1",
+    "title-case": "^0.1.0"
+  },
+  "devDependencies": {
+    "browserify": "^4.1.2",
+    "ecstatic": "^0.5.3"
+  }
+}
