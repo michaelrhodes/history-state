@@ -20,16 +20,18 @@ run('it works', function(test) {
     test.ok(pattern.test(current), current)
   })
 
-  expected = first
-  state.change(first)
-
   setTimeout(function() {
-    expected = second
-    state.change(second)
+    expected = first
+    state.change(first)
 
     setTimeout(function() {
-      expected = first
-      history.back()
-    }, 0)
-  }, 0)
+      expected = second
+      state.change(second)
+
+      setTimeout(function() {
+        expected = first
+        history.back()
+      }, 100)
+    }, 100)
+  }, 100)
 })
