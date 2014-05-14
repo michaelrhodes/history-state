@@ -8,14 +8,28 @@ var posthost = function(href) {
 }
 
 run('it works', function(test) {
-  var path = '/testing-testing-123'
+  test.plan(3)
 
-  state.once('change', function() {
+  var first = '/first'
+  var second = '/second'
+  var expected = ''
+
+  state.on('change', function() {
     var current = posthost(location.href)
-    var pattern = concat(path, '$')
+    var pattern = concat(expected, '$')
     test.ok(pattern.test(current), current)
-    test.end()
   })
 
-  state.change(path)
+  expected = first
+  state.change(first)
+
+  setTimeout(function() {
+    expected = second
+    state.change(second)
+
+    setTimeout(function() {
+      expected = first
+      history.back()
+    }, 0)
+  }, 0)
 })
