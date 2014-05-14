@@ -3,43 +3,25 @@
   "version": "0.0.2",
   "description": "Allows you to listen and make changes to a page’s history state.",
   "main": "index.js",
+  "dependencies": {
+    "emitter-component": "^1.1.1",
+    "eventlistener": "0.0.1",
+    "raf-component": "^1.1.2"
+  },
+  "devDependencies": {
+    "concat-regexp": "0.0.1",
+    "tape": "^2.13.0"
+  },
   "testling": {
     "files": "test/*.js",
     "browsers": {
-      "ie": [
-        6,
-        7,
-        8,
-        9,
-        10
-      ],
-      "chrome": [
-        20,
-        25,
-        29
-      ],
-      "firefox": [
-        3,
-        4,
-        7,
-        19,
-        24
-      ],
-      "safari": [
-        5.1,
-        6
-      ],
-      "opera": [
-        10,
-        12,
-        15
-      ],
-      "iphone": [
-        6
-      ],
-      "android": [
-        4.2
-      ]
+      "ie": [ 6, 7, 8, 9, 10 ],
+      "chrome": [ 20, 25, 29 ],
+      "firefox": [ 3, 4, 7, 19, 24 ],
+      "safari": [ 5.1, 6 ],
+      "opera": [ 10, 12, 15 ],
+      "iphone": [ 6 ],
+      "android": [ 4.2 ]
     }
   },
   "scripts": {
@@ -51,9 +33,5 @@
     "hashchange"
   ],
   "author": "Michael Rhodes",
-  "license": "MIT",
-  "devDependencies": {
-    "concat-regexp": "0.0.1",
-    "tape": "^2.13.0"
-  }
+  "license": "MIT"
 }
