@@ -1,9 +1,8 @@
+require('../example/function-prototype-bind')
+
 var run = require('tape')
 var concat = require('concat-regexp')
 var state = require('../')()
-
-require('../example/function-prototype-bind')
-
 var posthost = function(href) {
   return href.replace(/^.+:\/\/[^\/]+(.+)/, '$1')
 }
