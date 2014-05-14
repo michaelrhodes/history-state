@@ -57,13 +57,13 @@ HistoryState.prototype.stop = function() {
 }
 
 HistoryState.prototype.change = function(path) {
+  var pathname = location.pathname
+  var hash = location.hash
   var isHash = /^#/.test(path)
   var reload = (
-    isHash ?
-      path === location.hash :
-    hasPushState ?
-      path === location.pathname + location.hash :
-    path === location.hash.substr(1)
+    isHash ? path === hash :
+    hasPushState ? path === pathname + hash :
+    path === hash.substr(1)
   )
 
   if (!reload) {
