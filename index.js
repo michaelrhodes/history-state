@@ -20,7 +20,7 @@ var set = (function() {
   }
 })()
 
-var HistoryState = function(options) {
+var HistoryState = function() {
   if (!(this instanceof HistoryState)) {
     return new HistoryState
   }
