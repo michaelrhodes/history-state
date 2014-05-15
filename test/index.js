@@ -1,29 +1,37 @@
 require('../example/function-prototype-bind')
 
 var run = require('tape')
-var state = require('../')()
+var HistoryState = require('../')
 var posthost = function(href) {
   return href.replace(/^.+:\/\/[^\/]+(.+)/, '$1')
 }
 
-run('it works', function(test) {
-  test.plan(3)
+var hasTail = function(haystack, needle) {
+  return haystack.lastIndexOf(needle) + needle.length === haystack.length
+}
+
+var shared = function(test, hash) {
+  var count = 0
 
   var first = '/first'
   var second = '/second'
-  var expected = ''
+  var expected = first
 
-  state.on('change', function() {
-    var current = posthost(location.href)
-    var good = (
-      current.lastIndexOf(expected) + expected.length ===
-      current.length
-    )
-    test.ok(good, current)
-  })
+  var state = new HistoryState(hash)
 
   setTimeout(function() {
-    expected = first
+    state.on('change', function() {
+      var current = posthost(location.href)
+      var good = hasTail(current, expected)
+      test.ok(good, current)
+      if (++count === 3) {
+        state.off() 
+        state.stop()
+        state.change('/')
+        test.end()
+      }
+    })
+
     state.change(first)
 
     setTimeout(function() {
@@ -33,7 +41,15 @@ run('it works', function(test) {
       setTimeout(function() {
         expected = first
         history.back()
-      }, 100)
-    }, 100)
-  }, 100)
+      }, 1000)
+    }, 1000)
+  }, 1000)
+}
+
+run('it with pushState or hashchange', function(test) {
+  shared(test)
+})
+
+run('it can just use hashchange', function(test) {
+  shared(test, true)
 })

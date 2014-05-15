@@ -6,26 +6,18 @@ var history = window.history
 var location = window.location
 var pushState = history.pushState
 var hasPushState = !!pushState
-var set = (function() {
-  if (hasPushState) {
-    return function(path) {
-      history.pushState(null, null, path)
-      return true
-    }
-  }
 
-  return function(hash) {
-    location.hash = hash
-    return true
-  }
-})()
 
-var HistoryState = function() {
+var HistoryState = function(hash) {
   if (!(this instanceof HistoryState)) {
-    return new HistoryState
+    return new HistoryState(hash)
   }
 
   this.started = false
+  this.usePushState = (
+    hasPushState && !hash
+  )
+
   this.start = this.start.bind(this)
   this.announce = this.emit.bind(this, 'change')
 
@@ -43,7 +35,7 @@ HistoryState.prototype.start = function() {
     this.started = true
     this.announce()
 
-    hasPushState ?
+    this.usePushState ?
       listener.add(window, 'popstate', this.announce) :
       listener.add(window, 'hashchange', this.announce)
 
@@ -51,7 +43,7 @@ HistoryState.prototype.start = function() {
 }
 
 HistoryState.prototype.stop = function() {
-  hasPushState ?
+  this.usePushState ?
     listener.remove(window, 'popstate', this.announce) :
     listener.remove(window, 'hashchange', this.announce)
 }
@@ -62,16 +54,27 @@ HistoryState.prototype.change = function(path) {
   var isHash = /^#/.test(path)
   var reload = (
     isHash ? path === hash :
-    hasPushState ? path === pathname + hash :
+    this.usePushState ? path === pathname + hash :
     path === hash.substr(1)
   )
 
   if (!reload) {
-    set(path) && this.announce()
+    this.set(path)
     return true
   }
 
   return false
+}
+
+HistoryState.prototype.set = function(path) {
+  if (this.usePushState) {
+    history.pushState(null, null, path)
+    this.announce()
+    return true
+  }
+
+  location.hash = path
+  return true
 }
 
 module.exports = HistoryState
