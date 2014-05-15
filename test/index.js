@@ -15,9 +15,11 @@ run('it works', function(test) {
   var expected = ''
 
   state.on('change', function() {
-    var current = posthost(location.href)
-    var pattern = concat(expected, '$')
-    test.ok(pattern.test(current), current)
+    setTimeout(function() {
+      var current = posthost(location.href)
+      var pattern = concat(expected, '$')
+      test.ok(pattern.test(current), current)
+    }, 0)
   })
 
   setTimeout(function() {
