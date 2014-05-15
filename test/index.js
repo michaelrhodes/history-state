@@ -10,14 +10,14 @@ var hasTail = function(haystack, needle) {
   return haystack.lastIndexOf(needle) + needle.length === haystack.length
 }
 
-var shared = function(test, hash) {
+var shared = function(test, options) {
   var count = 0
 
   var first = '/first'
   var second = '/second'
   var expected = first
 
-  var state = new HistoryState(hash)
+  var state = new HistoryState(options)
 
   setTimeout(function() {
     state.on('change', function() {
@@ -51,5 +51,16 @@ run('it with pushState or hashchange', function(test) {
 })
 
 run('it can just use hashchange', function(test) {
-  shared(test, true)
+  shared(test, { hash: true })
+})
+
+run('it can just use pushState', function(test) {
+  var hasPushState = !!history.pushState
+  try { 
+    shared(test, { pushState: true })
+  }
+  catch (e) {
+    test.notOk(hasPushState, e.message)
+    test.end()
+  }
 })

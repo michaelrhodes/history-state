@@ -7,17 +7,26 @@ var location = window.location
 var pushState = history.pushState
 var hasPushState = !!pushState
 
-
-var HistoryState = function(hash) {
+var HistoryState = function(options) {
   if (!(this instanceof HistoryState)) {
-    return new HistoryState(hash)
+    return new HistoryState(options)
+  }
+
+  var wantsPushState = options && options.pushState
+  var wantsHash = options && options.hash
+
+  this.usePushState = (
+    wantsPushState ||
+    (hasPushState && !wantsHash)
+  )
+
+  if (this.usePushState && !hasPushState && !wantsHash) {
+    throw new Error(
+      'This browser does not support history.pushState.'
+    )
   }
 
   this.started = false
-  this.usePushState = (
-    hasPushState && !hash
-  )
-
   this.start = this.start.bind(this)
   this.announce = this.emit.bind(this, 'change')
 

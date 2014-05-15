@@ -9,14 +9,15 @@ $ npm install history-state
 ```
 
 ### API
-The default mechanisms are `history.pushState` and `window.onpopstate`.
-Older browsers depend on `location.hash` and `window.onhashchange`.
+By default, the mechanisms used are `history.pushState` and `window.onpopstate`, with older browsers falling back to `location.hash` and `window.onhashchange`. This behaviour can be overridden by passing the constructor an options object, detailed below.
 
 ```js
-// Passing true into the constructor makes all state
-// changes use location.hash regardless of whether
-// the browser supports pushState.
-var state = require('history-state')(true)
+var state = require('history-state')({
+  // Only use location.hash and window.onhashchange.
+  hash: true,
+  // Only use history.pushState and window.onpopstate.
+  pushState: true
+})
 
 state.change('/some-path')
 

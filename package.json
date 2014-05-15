@@ -1,7 +1,7 @@
 {
   "name": "history-state",
-  "version": "0.1.1",
-  "description": "Allows you to listen and make changes to a page’s history state.",
+  "version": "1.0.0",
+  "description": "Allows you to monitor and make changes to a page’s history state.",
   "main": "index.js",
   "dependencies": {
     "emitter-component": "^1.1.1",
