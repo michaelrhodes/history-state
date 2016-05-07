@@ -1,19 +1,13 @@
-var format = require('title-case')
-var concat = require('concat-regexp')
-var normalize = require('normalize-event')
-var can = require('can-route')()
-var state = require('../')({
-  pushState: true,
-  hash: true
-})
+require('./function-prototype-bind')
 
-var posthost = function(href) {
-  return href.replace(/^.+:\/\/[^\/]+(.+)/, '$1')
-}
+var format = require('title-case')
+var normalize = require('normalize-event')
+var did = require('did-route')()
+var state = require('../')()
 
 var title = document.title
-var heading = document.querySelector('h1')
-var list = document.querySelector('.pages')
+var heading = document.getElementById('heading')
+var list = document.getElementById('list')
 
 var update = function(name) {
   var page = format(name || '500')
@@ -21,23 +15,20 @@ var update = function(name) {
   heading.innerHTML = page
 }
 
-var alpha = /(:<anchor>^|#)/
-var omega = /\/?$/
-var route = {
-  home: concat(alpha, omega),
-  name: concat(alpha, /\/(:<state>[^#\/]+)(:<hash>#.*)?/, omega)
-}
-
-can.get(route.name, function(params) {
-  update(params.state)
-})
-
-can.get(route.home, function() {
+did.get('/', function() {
   update('homepage')
 })
 
+did.get('/:state([^#\/]+)', function(params) {
+  update(params.state)
+})
+
+did.get('*#/:state([^#\/]+)', function(params) {
+  update(params.state)
+})
+
 state.on('change', function() {
-  if (!can.route(location, true)) {
+  if (!did.route(location, true)) {
     update('404')
   }
 })
@@ -48,4 +39,8 @@ list.onclick = function(e) {
     e.preventDefault()
     state.change(posthost(e.target.getAttribute('href')))
   }
+}
+
+function posthost(href) {
+  return href.replace(/^.+:\/\/[^\/]+(.+)/, '$1')
 }

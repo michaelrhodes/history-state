@@ -24,7 +24,7 @@ var shared = function(test, options) {
       var current = posthost(location.href)
       var good = hasTail(current, expected)
       test.ok(good, current)
-      if (++count === 3) {
+      if (++count === 2) {
         state.off() 
         state.stop()
         state.change('/')
@@ -37,11 +37,6 @@ var shared = function(test, options) {
     setTimeout(function() {
       expected = second
       state.change(second)
-
-      setTimeout(function() {
-        expected = first
-        history.back()
-      }, 1000)
     }, 1000)
   }, 1000)
 }

@@ -11,13 +11,13 @@
   "author": "Michael Rhodes",
   "license": "MIT",
   "dependencies": {
-    "can-route": "^0.3.0",
-    "concat-regexp": "0.0.1",
-    "normalize-event": "0.0.0",
-    "title-case": "^0.1.0"
+    "did-route": "~1.1.0",
+    "concat-regexp": "~0.0.6",
+    "normalize-event": "~0.0.0",
+    "title-case": "~0.1.0"
   },
   "devDependencies": {
-    "browserify": "^4.1.2",
-    "ecstatic": "^0.5.3"
+    "browserify": "~13.0.0",
+    "ecstatic": "~0.5.3"
   }
 }

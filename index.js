@@ -1,6 +1,6 @@
 var raf = require('raf-component')
 var emitter = require('emitter-component')
-var listener = require('eventlistener')
+var hashwatch = require('hashwatch')
 
 var history = window.history
 var location = window.location
@@ -45,16 +45,16 @@ HistoryState.prototype.start = function() {
     this.announce()
 
     this.usePushState ?
-      listener.add(window, 'popstate', this.announce) :
-      listener.add(window, 'hashchange', this.announce)
+      window.addEventListener('popstate', this.announce, false) :
+      this.hashwatch = hashwatch(this.announce)
 
   }.bind(this))
 }
 
 HistoryState.prototype.stop = function() {
   this.usePushState ?
-    listener.remove(window, 'popstate', this.announce) :
-    listener.remove(window, 'hashchange', this.announce)
+    window.removeEventListener('popstate', this.announce) :
+    this.hashwatch.pause()
 }
 
 HistoryState.prototype.change = function(path) {
@@ -75,7 +75,7 @@ HistoryState.prototype.change = function(path) {
   return false
 }
 
-HistoryState.prototype.set = function(path) {
+HistoryState.prototype.set = function(path, silent) {
   if (this.usePushState) {
     history.pushState(null, null, path)
     this.announce()
