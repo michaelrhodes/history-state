@@ -1,5 +1,3 @@
-require('./function-prototype-bind')
-
 var format = require('title-case')
 var normalize = require('normalize-event')
 var did = require('did-route')()
