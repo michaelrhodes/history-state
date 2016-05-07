@@ -1,6 +1,6 @@
 {
   "name": "history-state",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allows you to monitor and make changes to a page’s history state.",
   "main": "index.js",
   "dependencies": {
