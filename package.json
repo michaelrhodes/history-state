@@ -6,7 +6,7 @@
   "dependencies": {
     "hashwatch": "~1.0.0",
     "emitter-component": "~1.1.1",
-    "raf-component": "~1.1.2"
+    "rafl": "~1.2.2"
   },
   "devDependencies": {
     "tape": "~2.13.0",

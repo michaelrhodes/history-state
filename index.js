@@ -1,4 +1,4 @@
-var raf = require('raf-component')
+var raf = require('rafl')
 var emitter = require('emitter-component')
 var hashwatch = require('hashwatch')
 
