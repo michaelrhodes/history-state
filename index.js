@@ -7,13 +7,15 @@ var location = window.location
 var pushState = history.pushState
 var hasPushState = !!pushState
 
-var HistoryState = function(options) {
+module.exports = HistoryState
+
+function HistoryState (opts) {
   if (!(this instanceof HistoryState)) {
-    return new HistoryState(options)
+    return new HistoryState(opts)
   }
 
-  var wantsPushState = options && options.pushState
-  var wantsHash = options && options.hash
+  var wantsPushState = opts && opts.pushState
+  var wantsHash = opts && opts.hash
 
   this.usePushState = (
     wantsPushState ||
@@ -28,8 +30,7 @@ var HistoryState = function(options) {
 
   this.started = false
   this.start = this.start.bind(this)
-  this.announce = this.emit.bind(this, 'change')
-
+  this.announce = beforeChange.call(this, opts && opts.beforeChange)
   this.start()
 }
 
@@ -37,17 +38,13 @@ emitter(HistoryState.prototype)
 
 HistoryState.prototype.start = function() {
   raf(function() {
-    if (this.started) {
-      return
-    }
-
+    if (this.started) return
     this.started = true
     this.announce()
 
     this.usePushState ?
       window.addEventListener('popstate', this.announce, false) :
       this.hashwatch = hashwatch(this.announce)
-
   }.bind(this))
 }
 
@@ -67,23 +64,25 @@ HistoryState.prototype.change = function(path) {
     path === hash.substr(1)
   )
 
-  if (!reload) {
-    this.set(path)
-    return true
-  }
-
-  return false
+  return reload ? false : this.set(path), true
 }
 
 HistoryState.prototype.set = function(path, silent) {
-  if (this.usePushState) {
-    history.pushState(null, null, path)
-    this.announce()
+  if (!this.usePushState) {
+    location.hash = path
     return true
   }
 
-  location.hash = path
+  history.pushState(null, null, path)
+  this.announce()
   return true
 }
 
-module.exports = HistoryState
+function beforeChange (fn) {
+  var emit = this.emit.bind(this, 'change')
+  return typeof fn == 'function' ? maybeEmit : emit
+
+  function maybeEmit () {
+    if (fn.apply(null, arguments) !== false) emit()
+  }
+}

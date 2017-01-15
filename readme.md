@@ -16,13 +16,25 @@ var state = require('history-state')({
   // Only use location.hash and window.onhashchange.
   hash: true,
   // Only use history.pushState and window.onpopstate.
-  pushState: true
+  pushState: true,
+  // Return false to prevent a change event from being fired.
+  beforeOnChange: function() {
+    if (location.pathname === '/some-bad-path') {
+      return false
+    }
+  }
 })
 
 state.change('/some-path')
+state.change('/some-other-path')
+state.change('/some-bad-path')
+state.change('/some-path')
 
 state.on('change', function() {
-  console.log(location.href)
+  console.log(location.pathname)
+  > '/some-path'
+  > '/some-other-path'
+  > '/some-path'
 })
 
 // Toggle the window listeners.
