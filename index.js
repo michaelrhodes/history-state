@@ -1,5 +1,5 @@
 var raf = require('rafl')
-var emitter = require('emitter-component')
+var emitter = require('mittens')
 var hashwatch = require('hashwatch')
 
 var history = window.history
@@ -34,7 +34,7 @@ function HistoryState (opts) {
   this.start()
 }
 
-emitter(HistoryState.prototype)
+emitter.call(HistoryState.prototype)
 
 HistoryState.prototype.start = function() {
   raf(function() {

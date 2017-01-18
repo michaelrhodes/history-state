@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "hashwatch": "~1.0.0",
-    "emitter-component": "~1.1.1",
+    "mittens": "~1.0.0",
     "rafl": "~1.2.2"
   },
   "devDependencies": {

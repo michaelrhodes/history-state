@@ -32,7 +32,7 @@ run('it can prevent change events from firing', function(test) {
       var good = hasTail(current, expected)
       test.ok(good, current)
       if (++count === 1) {
-        state.off() 
+        state.off('change')
         state.stop()
         state.change('/')
         test.end()
@@ -82,7 +82,7 @@ function shared(test, options) {
       var good = hasTail(current, expected)
       test.ok(good, current)
       if (++count === 2) {
-        state.off() 
+        state.off('change')
         state.stop()
         state.change('/')
         test.end()
