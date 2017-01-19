@@ -30,13 +30,17 @@ function HistoryState (opts) {
 
   this.started = false
   this.start = this.start.bind(this)
-  this.announce = beforeChange.call(this, opts && opts.beforeChange)
+  this.announce = this.emit.bind(this, 'change')
   this.start()
 }
 
-emitter.call(HistoryState.prototype)
+HistoryState.prototype = emitter.call({
+  change: change,
+  start: start,
+  stop: stop
+})
 
-HistoryState.prototype.start = function() {
+function start () {
   raf(function() {
     if (this.started) return
     this.started = true
@@ -48,13 +52,13 @@ HistoryState.prototype.start = function() {
   }.bind(this))
 }
 
-HistoryState.prototype.stop = function() {
+function stop () {
   this.usePushState ?
     window.removeEventListener('popstate', this.announce) :
     this.hashwatch.pause()
 }
 
-HistoryState.prototype.change = function(path) {
+function change (path) {
   var pathname = location.pathname
   var hash = location.hash
   var isHash = /^#/.test(path)
@@ -64,10 +68,10 @@ HistoryState.prototype.change = function(path) {
     path === hash.substr(1)
   )
 
-  return reload ? false : this.set(path), true
+  return reload ? false : set.call(this, path), true
 }
 
-HistoryState.prototype.set = function(path, silent) {
+function set (path, silent) {
   if (!this.usePushState) {
     location.hash = path
     return true
@@ -76,13 +80,4 @@ HistoryState.prototype.set = function(path, silent) {
   history.pushState(null, null, path)
   this.announce()
   return true
-}
-
-function beforeChange (fn) {
-  var emit = this.emit.bind(this, 'change')
-  return typeof fn == 'function' ? maybeEmit : emit
-
-  function maybeEmit () {
-    if (fn.apply(null, arguments) !== false) emit()
-  }
 }

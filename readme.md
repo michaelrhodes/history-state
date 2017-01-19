@@ -13,27 +13,16 @@ By default, the mechanisms used are `history.pushState` and `window.onpopstate`,
 
 ```js
 var state = require('history-state')({
-  // Only use location.hash and window.onhashchange.
+  // Use only location.hash/onhashchange…
   hash: true,
-  // Only use history.pushState and window.onpopstate.
-  pushState: true,
-  // Return false to prevent a change event from being fired.
-  beforeOnChange: function() {
-    if (location.pathname === '/some-bad-path') {
-      return false
-    }
-  }
+  // …or use only history.pushState/onpopstate.
+  pushState: true
 })
 
-state.change('/some-path')
-state.change('/some-other-path')
-state.change('/some-bad-path')
 state.change('/some-path')
 
 state.on('change', function() {
   console.log(location.pathname)
-  > '/some-path'
-  > '/some-other-path'
   > '/some-path'
 })
 
