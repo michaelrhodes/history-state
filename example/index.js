@@ -13,15 +13,11 @@ var update = function(name) {
   heading.innerHTML = page
 }
 
-did.get('/', function() {
+did.get('#?/', function() {
   update('homepage')
 })
 
-did.get('/:state([^#\/]+)', function(params) {
-  update(params.state)
-})
-
-did.get('*#/:state([^#\/]+)', function(params) {
+did.get('#?/:state([^#\/]+)', function(params) {
   update(params.state)
 })
 

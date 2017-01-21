@@ -11,7 +11,7 @@
   "author": "Michael Rhodes",
   "license": "MIT",
   "dependencies": {
-    "did-route": "~1.1.0",
+    "did-route": "~3.0.0",
     "concat-regexp": "~0.0.6",
     "normalize-event": "~0.0.0",
     "title-case": "~0.1.0"
