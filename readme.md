@@ -1,35 +1,29 @@
 # history-state
-history-state allows you to monitor and make changes to a page’s history state. 
+monitor and mutate the browser url
 
-[![Browser support](https://ci.testling.com/michaelrhodes/history-state.png)](https://ci.testling.com/michaelrhodes/history-state)
-
-## Install
+## install
 ```sh
-$ npm install history-state
+pnpm install michaelrhodes/history-state#2.0.0
 ```
 
-### API
-By default, the mechanisms used are `history.pushState` and `window.onpopstate`, with older browsers falling back to `location.hash` and `window.onhashchange`. This behaviour can be overridden by passing the constructor an options object, detailed below.
-
+## use
 ```js
-var state = require('history-state')({
-  // Use only location.hash/onhashchange…
-  hash: true,
-  // …or use only history.pushState/onpopstate.
-  pushState: true
-})
+var state = require('history-state')()
 
-state.change('/some-path')
+state.onchange = function() {
+  console.log('[onchange]', location.pathname)
+}
 
-state.on('change', function() {
-  console.log(location.pathname)
-  > '/some-path'
-})
+state.push('/some-path')
+> '[onchange] /some-path'
 
-// Toggle the window listeners.
+state.replace('/replaced-some-path')
+> '[onchange] /replaced-some-path'
+
+// Toggle listeners
 state.stop()
 state.start()
 ```
 
-### License
+### obey
 [MIT](http://opensource.org/licenses/MIT)

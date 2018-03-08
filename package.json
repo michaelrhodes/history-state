@@ -1,38 +1,8 @@
 {
   "name": "history-state",
-  "version": "2.0.0",
-  "description": "Allows you to monitor and make changes to a page’s history state.",
-  "main": "index.js",
-  "dependencies": {
-    "hashwatch": "~1.0.0",
-    "mittens": "~1.0.0",
-    "rafl": "~1.2.2"
-  },
-  "devDependencies": {
-    "tape": "~2.13.0",
-    "testling": "~1.7.1"
-  },
-  "testling": {
-    "files": "test/*.js",
-    "browsers": {
-      "ie": [ 6, 7, 8, 9, 10 ],
-      "chrome": [ 20, 25, 29 ],
-      "firefox": [ 3, 4, 7, 19, 24 ],
-      "safari": [ 5.1, 6 ],
-      "opera": [ 10, 12, 15 ],
-      "iphone": [ 6 ],
-      "android": [ 4.2 ]
-    }
-  },
-  "scripts": {
-    "example": "cd example && npm install && npm start",
-    "test": "testling -u"
-  },
-  "keywords": [
-    "pushState",
-    "popstate",
-    "hashchange"
-  ],
   "author": "Michael Rhodes",
+  "version": "2.0.0",
+  "main": "index.js",
+  "description": "monitor and mutate the browser url",
   "license": "MIT"
 }

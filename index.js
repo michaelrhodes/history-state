@@ -1,83 +1,60 @@
-var raf = require('rafl')
-var emitter = require('mittens')
-var hashwatch = require('hashwatch')
-
-var history = window.history
-var location = window.location
-var pushState = history.pushState
-var hasPushState = !!pushState
-
 module.exports = HistoryState
 
-function HistoryState (opts) {
-  if (!(this instanceof HistoryState)) {
-    return new HistoryState(opts)
-  }
+function HistoryState () {
+  if (!(this instanceof HistoryState))
+    return new HistoryState
 
-  var wantsPushState = opts && opts.pushState
-  var wantsHash = opts && opts.hash
-
-  this.usePushState = (
-    wantsPushState ||
-    (hasPushState && !wantsHash)
-  )
-
-  if (this.usePushState && !hasPushState && !wantsHash) {
-    throw new Error(
-      'This browser does not support history.pushState.'
-    )
-  }
-
-  this.started = false
-  this.start = this.start.bind(this)
-  this.announce = this.emit.bind(this, 'change')
+  this.onchange = noop
+  this.listening = false
   this.start()
 }
 
-HistoryState.prototype = emitter.call({
-  change: change,
-  start: start,
-  stop: stop
-})
+;(function () {
+  this.stop = stop
+  this.start = start
+  this.push = push
+  this.replace = replace
+  this.handleEvent = handleEvent
+}).call(HistoryState.prototype)
 
 function start () {
-  raf(function() {
-    if (this.started) return
-    this.started = true
-    this.announce()
-
-    this.usePushState ?
-      window.addEventListener('popstate', this.announce, false) :
-      this.hashwatch = hashwatch(this.announce)
-  }.bind(this))
+  if (this.listening) return
+  this.listening = true
+  addEventListener('popstate', this)
 }
 
 function stop () {
-  this.usePushState ?
-    window.removeEventListener('popstate', this.announce) :
-    this.hashwatch.pause()
+  this.listening = false
+  removeEventListener('popstate', this)
 }
 
-function change (path) {
-  var pathname = location.pathname
-  var hash = location.hash
-  var isHash = /^#/.test(path)
-  var reload = (
-    isHash ? path === hash :
-    this.usePushState ? path === pathname + hash :
-    path === hash.substr(1)
-  )
+function push (path) {
+  change.call(this, path)
+}
 
-  return reload ? false : set.call(this, path), true
+function replace (path) {
+  change.call(this, path, true)
+}
+
+function handleEvent (e) {
+  this.onchange()
+}
+
+function change (path, silent) {
+  var pathname = location.pathname
+  var hash = location.hash.replace(/#$/, '')
+  var changed = path[0] !== '#' ?
+    path !== pathname + hash :
+    path !== hash
+
+  return changed && set.call(this, path, silent)
 }
 
 function set (path, silent) {
-  if (!this.usePushState) {
-    location.hash = path
-    return true
-  }
-
-  history.pushState(null, null, path)
-  this.announce()
+  var action = silent ? 'replace' : 'push'
+  history[action + 'State'](null, null, path)
+  if (this.listening) this.onchange()
   return true
 }
+
+function noop () {}
