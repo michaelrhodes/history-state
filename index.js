@@ -1,10 +1,10 @@
 module.exports = HistoryState
 
-function HistoryState () {
+function HistoryState (onchange) {
   if (!(this instanceof HistoryState))
-    return new HistoryState
+    return new HistoryState(onchange)
 
-  this.onchange = noop
+  this.onchange = onchange || noop
   this.listening = false
   this.start()
 }
