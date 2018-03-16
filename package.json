@@ -1,7 +1,7 @@
 {
   "name": "history-state",
   "author": "Michael Rhodes",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "index.js",
   "description": "monitor and mutate the browser url",
   "license": "MIT"

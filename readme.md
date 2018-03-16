@@ -3,7 +3,7 @@ monitor and mutate the browser url
 
 ## install
 ```sh
-pnpm install michaelrhodes/history-state#3.0.0
+pnpm install michaelrhodes/history-state#3.0.1
 ```
 
 ## use
